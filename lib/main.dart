@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pickrunner/widget/top_header.dart';
+import 'package:pickrunner/dashboard.dart';
+import 'package:pickrunner/pages/registration/profile_pic.dart';
+import 'package:pickrunner/pages/registration/personal.dart';
+import 'package:pickrunner/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.grey,
       ),
       debugShowCheckedModeBanner: false,
-      home: const Top_Header(),
+      home: const Personal_Details(),
     );
   }
 }

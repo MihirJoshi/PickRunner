@@ -3,6 +3,7 @@ import 'package:pickrunner/pages/active.dart';
 import 'package:pickrunner/pages/available.dart';
 import 'package:pickrunner/pages/completed.dart';
 
+// ignore: camel_case_types
 class Top_Header extends StatefulWidget {
   const Top_Header({Key? key}) : super(key: key);
 
@@ -10,6 +11,7 @@ class Top_Header extends StatefulWidget {
   State<Top_Header> createState() => _Top_HeaderState();
 }
 
+// ignore: camel_case_types
 class _Top_HeaderState extends State<Top_Header> {
   String istapped = ' ';
   @override
@@ -19,7 +21,7 @@ class _Top_HeaderState extends State<Top_Header> {
       child: Scaffold(
         appBar: AppBar(
           leading: Row(
-            children: [
+            children: const <Widget>[
               Icon(
                 Icons.arrow_back,
                 color: Colors.black,
@@ -29,7 +31,7 @@ class _Top_HeaderState extends State<Top_Header> {
           centerTitle: true,
           backgroundColor: Colors.white,
           foregroundColor: Colors.red,
-          bottom: TabBar(
+          bottom: const TabBar(
             indicatorColor: Colors.redAccent,
             indicatorWeight: 5,
             tabs: [
@@ -45,11 +47,11 @@ class _Top_HeaderState extends State<Top_Header> {
             ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            Container(child: Available()),
-            Container(child: Active()),
-            Container(child: Completed()),
+        body: const TabBarView(
+          children: <Widget>[
+            Available(),
+            Active(),
+            Completed(),
           ],
         ),
       ),
