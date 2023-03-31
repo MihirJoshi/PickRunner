@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:61370275449:android:ea114daf5c1b409f06a6a8",
+        "mobilesdk_app_id": "1:61370275449:android:bfc4dddbd99c4db806a6a8",
         "android_client_info": {
-          "package_name": "com.example.pickrun_client_app"
+          "package_name": "com.example.pickrun_new_client_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "61370275449-p8ep13kfu6q1tftdq3k2s6cpiq1g4gke.apps.googleusercontent.com",
+          "client_id": "61370275449-c139jq079gsacauc4hb8bk5vcdh40av2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.pickrun_client_app",
+            "package_name": "com.example.pickrun_new_client_app",
             "certificate_hash": "fefdecd3bfce5eb57efd6dc1cbbe479fbe455fc1"
           }
         },
@@ -44,7 +44,7 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:61370275449:android:785761d79400082706a6a8",
+        "mobilesdk_app_id": "1:61370275449:android:d7a6152a36f9b33706a6a8",
         "android_client_info": {
           "package_name": "com.example.pickrunner"
         }

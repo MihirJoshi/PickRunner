@@ -14,9 +14,9 @@ class Header_Box extends StatelessWidget {
   final Color next_color;
   const Header_Box(
       {Key? key,
-      required this.color,
+      this.color = Colors.grey,
       required this.pre_text,
-      required this.next_color,
+      this.next_color = Colors.grey,
       required this.next_dash,
       required this.next_text})
       : super(key: key);

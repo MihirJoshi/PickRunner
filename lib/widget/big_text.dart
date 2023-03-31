@@ -8,9 +8,9 @@ class BigText extends StatelessWidget {
   BigText(
       {Key? key,
       required this.title,
-      required this.size,
-      required this.weight,
-      required this.color})
+      this.size = 20,
+      this.weight = FontWeight.bold,
+      this.color = Colors.black})
       : super(key: key);
 
   @override

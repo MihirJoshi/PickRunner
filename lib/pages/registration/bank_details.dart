@@ -1,10 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pickrunner/pages/registration/password.dart';
-import 'package:pickrunner/pages/registration/profile_pic.dart';
+import 'package:pickrunner/widget/big_text.dart';
+import 'package:pickrunner/widget/button_widget.dart';
+import 'package:pickrunner/widget/field_widget.dart';
+import 'package:pickrunner/widget/header_box.dart';
+import 'package:pickrunner/widget/header_steps.dart';
 
 // ignore: camel_case_types
 class Bank_Details extends StatefulWidget {
-  const Bank_Details({Key? key}) : super(key: key);
+  String name, address, email, mobNo, pinCode, adharNo, panNo, lNo;
+  File profilePath, adharFrontPath, adharBackPath, pathPAN;
+  File? pathDriving;
+  Bank_Details({Key? key, required this.name, required this.email, required this.address, required this.mobNo, required this.pinCode, required this.profilePath, required this.adharNo, required this.adharFrontPath, required this.adharBackPath, required this.panNo, required this.pathPAN, this.lNo = "", this.pathDriving}) : super(key: key);
 
   @override
   State<Bank_Details> createState() => _Bank_DetailsState();
@@ -12,32 +22,14 @@ class Bank_Details extends StatefulWidget {
 
 // ignore: camel_case_types
 class _Bank_DetailsState extends State<Bank_Details> {
+  TextEditingController _accType = TextEditingController();
+  TextEditingController _ifscCode = TextEditingController();
+  TextEditingController _branchNo = TextEditingController();
+  TextEditingController _accNo = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    
     // ignore: non_constant_identifier_names
-    final next_button = Material(
-      elevation: 5,
-      borderRadius: BorderRadius.circular(30),
-      color: const Color.fromARGB(187, 7, 207, 183),
-      child: MaterialButton(
-        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        minWidth: 225,
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => Password_Details()));
-        },
-        child: const Text(
-          "Next",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontFamily: "Roboto"),
-        ),
-      ),
-    );
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 224, 223, 221),
       appBar: AppBar(
@@ -55,95 +47,18 @@ class _Bank_DetailsState extends State<Bank_Details> {
           padding: const EdgeInsets.only(top: 10),
           child: Column(
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(left: 20),
-                    alignment: Alignment.topLeft,
-                    child: const Text(
-                      "Registration",
-                      style:
-                          TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(right: 20),
-                    alignment: Alignment.topLeft,
-                    child: const Text(
-                      "Steps: 6/7",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ],
+              StepsHeader(
+                small_text: "Steps: 6/7",
               ),
               const SizedBox(
                 height: 20,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: const Text(
-                      "Bank Details",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: const Text(
-                      "- - - - - - - ->",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(right: 22),
-                    child: const Text("Password Details",
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.only(left: 20),
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        boxShadow: [
-                          BoxShadow(
-                              offset: Offset(2.0, 2.0), color: Colors.green)
-                        ]),
-                    height: 7,
-                    width: 98,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 20),
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        boxShadow: [
-                          BoxShadow(
-                              offset: Offset(2.0, 2.0), color: Colors.grey)
-                        ]),
-                    height: 7,
-                    width: 100,
-                  ),
-                ],
-              ),
+              const Header_Box(
+                  color: Colors.grey,
+                  pre_text: "Bank Details",
+                  next_color: Colors.grey,
+                  next_dash: " - - - - - - - - >",
+                  next_text: "Password Details"),
               const SizedBox(
                 height: 35,
               ),
@@ -158,7 +73,7 @@ class _Bank_DetailsState extends State<Bank_Details> {
                           offset: Offset(2.0, 2.0),
                           color: Color.fromARGB(147, 250, 250, 250))
                     ]),
-                height: 540,
+                height: 560,
                 width: 500,
                 child: Column(
                   children: <Widget>[
@@ -168,75 +83,121 @@ class _Bank_DetailsState extends State<Bank_Details> {
                     Container(
                       padding: const EdgeInsets.only(left: 25),
                       alignment: Alignment.topLeft,
-                      child: const Text(
-                        "Enter Bank Details",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      child: BigText(
+                          title: "Enter Bank Details",
+                          size: 20,
+                          weight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                     const SizedBox(
                       height: 35,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25, right: 25),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.account_balance_outlined),
-                          labelText: 'Enter Account Number ',
-                        ),
-                      ),
-                    ),
+                    Field_Widget(
+                      valid: AutovalidateMode.always,
+                      control: _accNo,
+                        validate: (value){
+                          if (value!.isEmpty) {
+                              return ("Enter Account Number");
+                            }
+                            //reg expression for email
+                            if (!RegExp(
+                                    "^[0-9]{9,18}")
+                                .hasMatch(value)) {
+                              return ("Please Enter the Account Number");
+                            }
+                            return null;
+                        },
+                        type: TextInputType.number,
+                        icon: Icons.account_balance_outlined,
+                        label: "Enter Account Number"),
                     const SizedBox(
                       height: 15,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25, right: 25),
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.code_outlined),
-                          labelText: 'Enter IFSC Code. ',
-                        ),
-                      ),
-                    ),
+                      Field_Widget(
+                        valid: AutovalidateMode.always,
+                        control: _ifscCode,
+                        validate: (value){
+                          if (value!.isEmpty) {
+                              return ("Enter IFSC Code(ABCD0123456) format");
+                            }
+                            //reg expression for email
+                            if (!RegExp(
+                                    "^[A-Z]{4}0[A-Z0-9]{6}")
+                                .hasMatch(value)) {
+                              return ("Please Enter IFSC Code(ABCD0123456)");
+                            }
+                            return null;
+                        },
+                        type: TextInputType.text,
+                        icon: Icons.code_outlined,
+                        label: "Enter IFSC Code"),
                     const SizedBox(
                       height: 15,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25, right: 25),
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.near_me),
-                          labelText: 'Enter Branch Name ',
-                        ),
-                      ),
-                    ),
+                     Field_Widget(
+                      valid: AutovalidateMode.always,
+                      control: _branchNo,
+                        validate: (value){
+                          if (value!.isEmpty) {
+                              return ("Enter Branch Name");
+                            }
+                            //reg expression for email
+                            if (!RegExp(
+                                    "^.{2,}")
+                                .hasMatch(value)) {
+                              return ("Please Enter Branch Name");
+                            }
+                            return null;
+                        },
+                        type: TextInputType.text,
+                        icon: Icons.near_me,
+                        label: "Enter Branch Name"),
                     const SizedBox(
                       height: 15,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25, right: 25),
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.type_specimen_outlined),
-                          labelText: 'Enter Account Type ',
-                        ),
-                      ),
-                    ),
+                     Field_Widget(
+                      valid: AutovalidateMode.always,
+                      control: _accType,
+                        validate: (value){
+                          if (value!.isEmpty) {
+                              return ("Enter Account Type");
+                            }
+                            //reg expression for email
+                            if (!RegExp(
+                                    "^.{2,}")
+                                .hasMatch(value)) {
+                              return ("Please Enter Account Type");
+                            }
+                            return null;
+                        },
+                        type: TextInputType.text,
+                        icon: Icons.type_specimen_outlined,
+                        label: "Enter Account Type"),
                     const SizedBox(
                       height: 15,
                     ),
                     const SizedBox(
                       height: 28,
                     ),
-                    Container(
-                      child: next_button,
-                    )
+                    Button_Widget(
+                        pressed: () {
+                          if(_accNo == " " && _accType == " " && _branchNo == " " && _ifscCode == " ")
+                          {
+                              Fluttertoast.showToast(msg: "Please fill the Information");
+                          }
+                          else
+                          {
+                            print("enter");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Password_Details(name: widget.name, address: widget.address, email: widget.email, mobNo: widget.mobNo, pinCode: widget.pinCode, profilePath: widget.profilePath, adharNo: widget.adharNo, adharFrontPath: widget.adharFrontPath, adharBackPath: widget.adharBackPath, panNo: widget.panNo, pathPAN: widget.pathPAN, lNo: widget.lNo, pathDriving: widget.pathDriving!, accNo: _accNo.text, accType: _accType.text, branchNo: _branchNo.text, ifscCode: _ifscCode.text,)));
+                          }
+                          
+                        },
+                        width: 225,
+                        text: "Next")
                   ],
                 ),
               ),

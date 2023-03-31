@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:pickrunner/widget/big_text.dart';
-import 'package:pickrunner/widget/small_text.dart';
+import 'package:pickrunner/widget/circle_avatar.dart.dart';
 
 class StepsHeader extends StatelessWidget {
   final String small_text;
   final double small_size;
   final FontWeight small_weight;
-  const StepsHeader({
+  final Color color;
+  StepsHeader({
     Key? key,
     required this.small_text,
-    required this.small_size,
-    required this.small_weight,
+    this.small_size = 18,
+    this.small_weight = FontWeight.w500,
+    this.color = Colors.black,
   }) : super(key: key);
 
   @override
@@ -31,10 +33,11 @@ class StepsHeader extends StatelessWidget {
         Container(
           padding: EdgeInsets.only(right: 20),
           alignment: Alignment.topLeft,
-          child: SmallText(
+          child: BigText(
             title: small_text,
             weight: small_weight,
             size: small_size,
+            color: color,
           ),
         ),
       ],

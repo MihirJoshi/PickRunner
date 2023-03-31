@@ -32,15 +32,15 @@ class _DashboardState extends State<Dashboard> {
                     NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverAppBar(
                   title: Row(
+                    
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(10, 15, 100, 0),
-                        child: Text(
-                          "Orders",
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
+                      
+                      Text(
+                        "Orders",
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
                       ),
+                      Padding(padding: EdgeInsets.only(right: 55)),
                       IconButton(
                           onPressed: () {
                             Navigator.push(
