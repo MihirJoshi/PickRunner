@@ -137,7 +137,7 @@ class _Driving_DetailsState extends State<Driving_Details> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Bank_Details(name: widget.name, address: widget.address, email: widget.email, mobNo: widget.mobNo, pinCode: widget.pinCode, profilePath: widget.profilePath, adharNo: widget.adharNo, adharFrontPath: widget.pathAdharFront, adharBackPath: widget.pathAdharBack, panNo: widget.panNo, pathPAN: widget.pathPAN, lNo: _lNo.text, pathDriving: _driving!,)));
+                                  builder: (context) => Bank_Details(name: widget.name, address: widget.address, email: widget.email, mobNo: widget.mobNo, pinCode: widget.pinCode, profilePath: widget.profilePath, adharNo: widget.adharNo, adharFrontPath: widget.pathAdharFront, adharBackPath: widget.pathAdharBack, panNo: widget.panNo, pathPAN: widget.pathPAN, lNo: _lNo.text, pathDriving: _driving,)));
                         },
                         width: 225,
                         text: "Next")

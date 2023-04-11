@@ -192,7 +192,7 @@ class _Bank_DetailsState extends State<Bank_Details> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      Password_Details(name: widget.name, address: widget.address, email: widget.email, mobNo: widget.mobNo, pinCode: widget.pinCode, profilePath: widget.profilePath, adharNo: widget.adharNo, adharFrontPath: widget.adharFrontPath, adharBackPath: widget.adharBackPath, panNo: widget.panNo, pathPAN: widget.pathPAN, lNo: widget.lNo, pathDriving: widget.pathDriving!, accNo: _accNo.text, accType: _accType.text, branchNo: _branchNo.text, ifscCode: _ifscCode.text,)));
+                                      Password_Details(name: widget.name, address: widget.address, email: widget.email, mobNo: widget.mobNo, pinCode: widget.pinCode, profilePath: widget.profilePath, adharNo: widget.adharNo, adharFrontPath: widget.adharFrontPath, adharBackPath: widget.adharBackPath, panNo: widget.panNo, pathPAN: widget.pathPAN, lNo: widget.lNo, pathDriving: widget.pathDriving, accNo: _accNo.text, accType: _accType.text, branchNo: _branchNo.text, ifscCode: _ifscCode.text,)));
                           }
                           
                         },

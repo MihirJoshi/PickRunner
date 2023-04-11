@@ -22,6 +22,7 @@ class DriverModel {
   String? pass;
   String? rePass;
   String? type;
+  String? driverId;
 
   DriverModel({
     this.uid,
@@ -44,7 +45,8 @@ class DriverModel {
     this.accType, 
     this.pass, 
     this.rePass,
-    this.type
+    this.type,
+     this.driverId,
   });
 
   // recieving data from the server
@@ -71,6 +73,7 @@ class DriverModel {
       pass: map['pass'],
       rePass: map['rePass'],
       type: map['type'],
+      driverId: map['driverId'],
     );
   }
 
@@ -98,7 +101,8 @@ class DriverModel {
       'accType': accType,
       'pass': pass,
       'rePass': rePass,
-      'type': type
+      'type': type,
+      'driverId': driverId,
     };
   }
 }

@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pickrunner/dashboard.dart';
+import 'package:pickrunner/pages/login_page.dart';
 import 'package:pickrunner/pages/profile_page.dart';
 import 'package:pickrunner/pages/registration/personal.dart';
 
@@ -31,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   route() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Personal_Details()));
+        context, MaterialPageRoute(builder: (context) => const Log()));
   }
 
   @override

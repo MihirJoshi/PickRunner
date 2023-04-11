@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,11 +41,30 @@ class _Password_DetailsState extends State<Password_Details> {
 
   // string for displaying the error Message
   String? errorMessage;
-  
+  String? driverId;
+  @override
+
+  void initState()
+  {
+    driverId = generateDriverId();
+    super.initState();
+  }
+
+  String generateDriverId() {
+  String orderIdTemplate = "#%07d";
+  int orderIdSuffix = generateRandomNumber(1000000, 9999999);
+  return orderIdTemplate.replaceAll("%07d", orderIdSuffix.toString());
+}
+
+int generateRandomNumber(int min, int max) {
+  final _random = Random();
+  return min + _random.nextInt(max - min);
+}
   @override
   Widget build(BuildContext context) {
     String email = widget.email;
     print(widget.accNo+ widget.accType + widget.branchNo + widget.ifscCode);
+    print(driverId);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 224, 223, 221),
       appBar: AppBar(
@@ -349,6 +369,7 @@ class _Password_DetailsState extends State<Password_Details> {
     driverModel.pass = _password.text;
     driverModel.rePass = _rePassword.text;
     driverModel.type = "Driver";
+    driverModel.driverId = driverId;
 
     // for downloading url of image
 
@@ -361,7 +382,7 @@ class _Password_DetailsState extends State<Password_Details> {
     Navigator.pushAndRemoveUntil(
         (context),
         MaterialPageRoute(builder: (context) => Log()),
-        (route) => false);
+        (route) => true);
   }
 
   void _resetform() {
