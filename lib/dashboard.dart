@@ -95,7 +95,7 @@ class _DashboardState extends State<Dashboard> {
               ),
             ];
           },
-          body: const TabBarView(
+          body: TabBarView(
             children: [
               Available(),
               Active(),

@@ -1,57 +1,60 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pickrunner/models/order_model.dart';
 
 class Active extends StatefulWidget {
-  const Active({Key? key}) : super(key: key);
+  String driverUid;
+  Active({Key? key, this.driverUid = " "}) : super(key: key);
 
   @override
   State<Active> createState() => _ActiveState();
 }
 
 class _ActiveState extends State<Active> {
+  OrderModel? _activeOrder;
+
+  @override
+void initState() {
+  super.initState();
+  _fetchActiveOrder(widget.driverUid);
+}
+
+void _fetchActiveOrder(String currentDriverId) {
+  FirebaseFirestore.instance
+      .collection('orders')
+      .where('status', isEqualTo: 'Active')
+      .where('driverUid', isEqualTo: currentDriverId)
+      .get()
+      .then((QuerySnapshot snapshot) {
+    if (snapshot.docs.isNotEmpty) {
+      final data = snapshot.docs.first.data();
+      final order = OrderModel.fromMap(data);
+      setState(() {
+        _activeOrder = order;
+      });
+    }
+  });
+}
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+     return Scaffold(
+    appBar: AppBar(
+      title: Text('Active Order'),
+    ),
+    body: Center(
+      child: _activeOrder == null
+          ? CircularProgressIndicator()
+          :  Column(
         children: [
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            color: Colors.green,
-            padding: const EdgeInsets.all(8.0),
-            margin: const EdgeInsets.only(top: 150, left: 8, right: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Text(
-                  'Thursday,',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  '7 july',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
+          SizedBox(height: 15,),
           Container(
             alignment: Alignment.topCenter,
             child: Text(
-              "Order ID: 556945",
+              "Order ID: ${_activeOrder?.orderId}",
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
           ),
@@ -66,7 +69,7 @@ class _ActiveState extends State<Active> {
               Container(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  "299",
+                  _activeOrder!.price!.toStringAsFixed(0),
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.w600),
                 ),
@@ -95,7 +98,7 @@ class _ActiveState extends State<Active> {
                       margin: EdgeInsets.only(left: 40),
                       alignment: Alignment.topRight,
                       child: Text(
-                        "Plot No. C-32, Darave Rd, Seawood Fountain, Nerul East, Navi Mumbai, Maharastra",
+                        "${_activeOrder?.picAddress}",
                         maxLines: 3,
                         style: const TextStyle(fontSize: 18),
                       ),
@@ -121,7 +124,7 @@ class _ActiveState extends State<Active> {
                       margin: const EdgeInsets.only(left: 40),
                       alignment: Alignment.topRight,
                       child: Text(
-                        "Plot No. C-32, Darave Rd, Seawood Fountain, Nerul East, Navi Mumbai, Maharastra",
+                        "${_activeOrder?.destiAddress}",
                         maxLines: 3,
                         style: const TextStyle(fontSize: 18),
                       ),
@@ -136,8 +139,8 @@ class _ActiveState extends State<Active> {
           ),
           Container(
             padding: EdgeInsets.only(left: 55),
-            child: const Text(
-              "Weight: 5 KG" " " " " " " "Type: Food",
+            child:  Text(
+              "Weight: ${_activeOrder!.weight.toString()} KG" " " " " " " "Type: ${_activeOrder!.category}",
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -149,6 +152,7 @@ class _ActiveState extends State<Active> {
           ),
         ],
       ),
+    ),
     );
   }
 }

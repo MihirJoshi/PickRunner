@@ -1,8 +1,11 @@
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pickrunner/models/order_model.dart';
+import 'package:pickrunner/pages/active.dart';
 import 'package:pickrunner/widget/big_text.dart';
 import 'package:pickrunner/widget/button_widget.dart';
 import 'package:pickrunner/widget/card_widget.dart';
@@ -10,7 +13,9 @@ import 'package:pickrunner/widget/order_display_widget.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   final OrderModel order;
-  const OrderDetailScreen({Key? key, required this.order}) : super(key: key);
+  String? uid;
+  final Function onOrderConfirmed;
+  OrderDetailScreen({Key? key, required this.order, required this.uid, required this.onOrderConfirmed}) : super(key: key);
 
   @override
   State<OrderDetailScreen> createState() => _OrderDetailScreenState();
@@ -24,8 +29,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     
     Set<Marker> markers = Set(); //markers for google map
     Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
-
-
+    String? driverId;
+    String? driverName;
+    String? driverMobno;
+    String? driverUid;
     double distance = 0.0;
     late double? pLat = widget.order.picLat;
     late double? pLng = widget.order.picLng;
@@ -34,7 +41,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   late LatLng startLocation = LatLng(pLat!, pLng!);
   late LatLng endLocation = LatLng(dLat!, dLng!);
   void initState() {
-
+    getData();
      markers.add(Marker( //add start location marker
         markerId: MarkerId(startLocation.toString()),
         position: startLocation, //position of marker
@@ -117,9 +124,47 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     return 12742 * asin(sqrt(a));
     
   }
+
+  Future<void> getData() async {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final User? user = auth.currentUser;
+  final uid = user!.uid;
+  final DocumentSnapshot driverSnapshot = await FirebaseFirestore.instance
+      .collection('drivers')
+      .doc(uid)
+      .get();
+  final driverData = driverSnapshot.data() as Map<String, dynamic>; // Cast driverData to a Map
+  setState(() {
+    driverId = driverData['driverId'];
+    driverName = driverData['name'];
+    driverMobno = driverData['mobNo'];
+    driverUid = driverData['uid'];
+  });
+}
+  Future<void> updateOrderStatus(String orderId, String driverId, String driverName, String driverMobno, String driverUid) async {
+  try {
+    await FirebaseFirestore.instance.collection('orders').doc(orderId).update({
+      'status': 'Active',
+      'driverId': driverId,
+      'driverName': driverName,
+      'driverMobno': driverMobno,
+      'driverUid': driverUid,
+    });
+    print('Order status updated successfully');
+  } on FirebaseException catch (e) {
+    if (e.code == 'not-found') {
+      print('Document does not exist');
+    } else {
+      print('Error updating order status: $e');
+    }
+  } catch (e) {
+    print('Error updating order status: $e');
+  }
+}
+
   @override
   Widget build(BuildContext context) {
-    print(startLocation);
+    print(widget.order.uid);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -380,7 +425,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               SizedBox(height: 15,),
               CardWidget(wet: "Weight: ", wetData: "${widget.order.weight.toString()} kg", price: "Cost: ", priceData: widget.order.price!.toStringAsFixed(0), type: "Courier Type: ", typeData: widget.order.category!),
               SizedBox(height: 25,),
-              Button_Widget(pressed: (){}, width: 270, text: "Start Now"),
+              Button_Widget(pressed: (){
+                updateOrderStatus(widget.order.uid!, driverId!, driverName!, driverMobno!, driverUid!);
+                widget.onOrderConfirmed();
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Active(driverUid: driverUid!,)));
+
+              }, width: 270, text: "Start Now"),
               SizedBox(height: 20,),
             ],
           ),

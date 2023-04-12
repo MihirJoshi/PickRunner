@@ -21,9 +21,10 @@ class _AvailableState extends State<Available> {
   
   Future<void> fetchOrders() async {
     final querySnapshot =
-        await FirebaseFirestore.instance.collection('orders').limit(5).get();
+        await FirebaseFirestore.instance.collection('orders').where('status', isEqualTo: 'Available').limit(5).get();
 
     final List<OrderModel> fetchedOrders = [];
+    
 
     querySnapshot.docs.forEach((doc) {
       final data = doc.data();
@@ -36,6 +37,12 @@ class _AvailableState extends State<Available> {
     });
   }
 
+  void removeOrder(String uid) {
+  setState(() {
+    orders.removeWhere((order) => order.uid == uid);
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +54,7 @@ class _AvailableState extends State<Available> {
               return Card(
                 child: InkWell(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => OrderDetailScreen(order: order)));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => OrderDetailScreen(order: order, uid: order.uid, onOrderConfirmed: () => removeOrder(order.uid!),)));
                   },
                   child: Padding
                   (
