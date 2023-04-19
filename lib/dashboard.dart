@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'pages/active.dart';
@@ -98,7 +99,7 @@ class _DashboardState extends State<Dashboard> {
           body: TabBarView(
             children: [
               Available(),
-              Active(),
+              Active(driverUid: FirebaseAuth.instance.currentUser!.uid),
               Completed(),
             ],
           ),

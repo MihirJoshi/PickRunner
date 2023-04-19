@@ -28,8 +28,9 @@ class OrderModel {
   String? driverName;
   String? driverMobno;
   String? driverUid;
+  String? parcelPhoto;
 
-  OrderModel({this.uid, this.category, this.codType, this.destiAddress, this.destiMobno, this.destiTime, this.distLat, this.distLng, this.distance, this.orderId, this.picAddress, this.picLat, this.picLng, this.picMobno, this.picTime, this.price, this.weight, this.destiInstruct, this.destiName, this.destiSmobno, this.email, this.picInstruct, this.picName, this.picSmobno, this.status, this.driverId, this.driverMobno, this.driverName, this.driverUid});
+  OrderModel({this.uid, this.category, this.codType, this.destiAddress, this.destiMobno, this.destiTime, this.distLat, this.distLng, this.distance, this.orderId, this.picAddress, this.picLat, this.picLng, this.picMobno, this.picTime, this.price, this.weight, this.destiInstruct, this.destiName, this.destiSmobno, this.email, this.picInstruct, this.picName, this.picSmobno, this.status, this.driverId, this.driverMobno, this.driverName, this.driverUid, this.parcelPhoto});
 
   // recieving data from the server
 
@@ -64,6 +65,7 @@ class OrderModel {
       driverMobno: map['driverMobno'],
       driverName: map['driverName'],
       driverUid: map['driverUid'],
+      parcelPhoto: map['parcelPhoto'],
     );
   }
 
@@ -100,6 +102,7 @@ class OrderModel {
       'driverName': driverName,
       'driverMobno': driverMobno,
       'driverUid': driverUid,
+      'parcelPhoto': parcelPhoto,
     };
   }
 }

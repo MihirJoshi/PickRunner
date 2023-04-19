@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pickrunner/dashboard.dart';
 import 'package:pickrunner/pages/f_pass.dart';
 import 'package:pickrunner/pages/registration/personal.dart';
@@ -35,7 +36,7 @@ class _LogState extends State<Log> {
     // Query the Firestore database for a driver document with matching driverId and password
     final driverDoc = await FirebaseFirestore.instance
         .collection('drivers')
-        .where('driverId', isEqualTo: driverId)
+        .where('email', isEqualTo: email)
         .where('pass', isEqualTo: pass)
         .limit(1)
         .get();
@@ -45,12 +46,12 @@ class _LogState extends State<Log> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const Dashboard(),
+          builder: (context) => Dashboard(),
         ),
       );
     } else {
       // If no matching driver document is found, display an error message to the user
-      print('Invalid driver ID or password');
+      Fluttertoast.showToast(msg: "Invalid email and password");
     }
   } catch (e) {
     // If there is an error, handle it appropriately (e.g. display an error message to the user)
@@ -70,11 +71,15 @@ class _LogState extends State<Log> {
     final driverField = TextFormField(
   style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
   //autofocus: false,
-  keyboardType: TextInputType.text, // Change keyboard type to accept text input
-  controller: driverIdController, // Use a TextEditingController to capture the driver ID
+  keyboardType: TextInputType.emailAddress, // Change keyboard type to accept text input
+  controller: emailController, // Use a TextEditingController to capture the driver ID
   validator: (value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter driver ID';
+    if (value!.isEmpty) {
+      return ("Enter the Email");
+    }
+    //reg expression for email
+    if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
+      return ("Please Enter the valid Email");
     }
     return null;
   },
@@ -127,7 +132,7 @@ class _LogState extends State<Log> {
                 pressed: () {
                   if (_formKey.currentState!.validate()) {
                     setState(() {
-                      driverId = driverIdController.text;
+                      email = emailController.text;
                       pass = passwordController.text;
                     });
                     userLogin();

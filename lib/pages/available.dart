@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pickrunner/models/order_model.dart';
 import 'package:pickrunner/pages/order_details_screen.dart';
@@ -12,16 +13,40 @@ class Available extends StatefulWidget {
 
 class _AvailableState extends State<Available> {
   List<OrderModel> orders = [];
+  String? driverUid;
+  String? driverName;
+  String? driverMobile;
+  String? status;
+  String? assignOrder;
   
   @override
   void initState() {
     super.initState();
+    checkAssignedOrder();
     fetchOrders();
+  }
+
+  Future<void> checkAssignedOrder() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('orders')
+        .where('driverUid', isEqualTo: user?.uid)
+        .where('status', isEqualTo: 'Active')
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final data = querySnapshot.docs.first.data();
+      driverUid = data['driverUid'];
+      driverName = data['driverName'];
+      driverMobile = data['driverMobno'];
+      assignOrder = data['orderId'];
+      status = data['status'];
+    }
   }
   
   Future<void> fetchOrders() async {
     final querySnapshot =
-        await FirebaseFirestore.instance.collection('orders').where('status', isEqualTo: 'Available').limit(5).get();
+        await FirebaseFirestore.instance.collection('orders').where('status', isEqualTo: 'available').limit(5).get();
 
     final List<OrderModel> fetchedOrders = [];
     
@@ -42,9 +67,34 @@ class _AvailableState extends State<Available> {
     orders.removeWhere((order) => order.uid == uid);
   });
 }
+bool canTakeOrder(OrderModel order) {
+  if (driverUid != null && driverName != null && driverMobile != null) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Already Assigned'),
+          content: Text(
+              'You have already assigned to Order ${assignOrder}.\n\n Please Complete your pending order!!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    return false;
+  } else {
+    
+    return true;
+  }
+}
 
   @override
   Widget build(BuildContext context) {
+    print(driverUid);
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -54,7 +104,18 @@ class _AvailableState extends State<Available> {
               return Card(
                 child: InkWell(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => OrderDetailScreen(order: order, uid: order.uid, onOrderConfirmed: () => removeOrder(order.uid!),)));
+                    if (canTakeOrder(order)) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => OrderDetailScreen(
+                            order: order,
+                            uid: order.uid,
+                            onOrderConfirmed: () => removeOrder(order.uid!),
+                          ),
+                        ),
+                      );
+                    }
+                  
                   },
                   child: Padding
                   (

@@ -19,7 +19,7 @@ class _ChatScreenState extends State<ChatScreen> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Dashboard()),
+              MaterialPageRoute(builder: (context) => Dashboard()),
             );
           },
           // ignore: prefer_const_constructors
