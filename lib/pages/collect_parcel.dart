@@ -8,17 +8,17 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pickrunner/models/order_model.dart';
 import 'package:pickrunner/pages/desti_route.dart';
 import 'package:pickrunner/widget/big_text.dart';
 import 'package:pickrunner/widget/button_widget.dart';
 import 'package:pickrunner/widget/field_widget.dart';
 import 'package:pickrunner/widget/image_box.dart';
 
+// ignore: must_be_immutable
 class CollectParcel extends StatefulWidget {
   String orderId, name, destiName, mobNo, destimobNo, email, driverUid, orderUid;
-  double price;
-  CollectParcel({Key? key, required this.destiName, required this.destimobNo, required this.email, required this.mobNo, required this.name, required this.orderId, required this.price, required this.driverUid, required this.orderUid}) : super(key: key);
+  double price, d_lat, d_lng, p_lat, p_lng;
+  CollectParcel({Key? key, required this.destiName, required this.destimobNo, required this.email, required this.mobNo, required this.name, required this.orderId, required this.price, required this.driverUid, required this.orderUid, required this.d_lat, required this.d_lng, required this.p_lat, required this.p_lng}) : super(key: key);
 
   @override
   State<CollectParcel> createState() => _CollectParcelState();
@@ -33,13 +33,10 @@ class _CollectParcelState extends State<CollectParcel> {
   
   Future<void> updateOrderStatus(String orderUid) async {
   try {
-    User? parcel = FirebaseAuth.instance.currentUser;
-
-    OrderModel orderModel = OrderModel();
 
     String imgId = DateTime.now().microsecondsSinceEpoch.toString();
     Reference imageFile =
-        FirebaseStorage.instance.ref().child('images').child('users$imgId');
+        FirebaseStorage.instance.ref().child('parcels').child('users$imgId');
     UploadTask task = imageFile.putFile(_parcel!);
     TaskSnapshot snapshot = await task;
     parcelUrl = await snapshot.ref.getDownloadURL();
@@ -212,7 +209,7 @@ class _CollectParcelState extends State<CollectParcel> {
                           if (_parcel != null) {
                             updateOrderStatus(widget.orderUid);
                             Fluttertoast.showToast(msg: "Details Submitted");
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=> DestinationRoute()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> DestinationRoute(driverUid: widget.driverUid, d_lat: widget.d_lat, d_lng: widget.d_lng, p_lat: widget.p_lat, p_lng: widget.p_lng,)));
                           } else {
                             Fluttertoast.showToast(
                                 msg: "Please upload Parcel Photo");

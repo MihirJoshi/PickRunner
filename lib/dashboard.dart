@@ -100,7 +100,7 @@ class _DashboardState extends State<Dashboard> {
             children: [
               Available(),
               Active(driverUid: FirebaseAuth.instance.currentUser!.uid),
-              Completed(),
+              Completed(driverUid: FirebaseAuth.instance.currentUser!.uid,),
             ],
           ),
         ),

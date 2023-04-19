@@ -1,208 +1,159 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pickrunner/models/order_model.dart';
+import 'package:pickrunner/widget/button_widget.dart';
 
 class Completed extends StatefulWidget {
-  const Completed({Key? key}) : super(key: key);
+  String driverUid;
+  Completed({Key? key, this.driverUid = ""}) : super(key: key);
 
   @override
   State<Completed> createState() => _CompletedState();
 }
 
 class _CompletedState extends State<Completed> {
+  OrderModel? _completeOrder;
+  @override
+
+  void initState() {
+  super.initState();
+  _fetchActiveOrder(widget.driverUid);
+}
+
+void _fetchActiveOrder(String currentDriverId) {
+  FirebaseFirestore.instance
+      .collection('orders')
+      .where('status', isEqualTo: 'Completed')
+      .where('driverUid', isEqualTo: currentDriverId)
+      .get()
+      .then((QuerySnapshot snapshot) {
+    if (snapshot.docs.isNotEmpty) {
+      final data = snapshot.docs.first.data();
+      final order = OrderModel.fromMap(data);
+      setState(() {
+        _completeOrder = order;
+      });
+    }
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+    appBar: AppBar(
+      title: Text('Active Order'),
+    ),
+    body: Center(
+      child: _completeOrder == null
+          ? CircularProgressIndicator()
+          :  Column(
         children: [
+          SizedBox(height: 80,),
+          Container(
+            alignment: Alignment.topCenter,
+            child: Text(
+              "Order ID: ${_completeOrder?.orderId}",
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+          ),
+          const Padding(padding: EdgeInsets.only(top: 20, right: 10, left: 10)),
+          Row(
+            children: [
+              const Padding(padding: EdgeInsets.only(left: 5)),
+              const Icon(
+                Icons.currency_rupee_outlined,
+                color: Colors.black,
+              ),
+              Container(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  _completeOrder!.price!.toStringAsFixed(0),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 28),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: const Text(
+                          "From: ",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 40),
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        "${_completeOrder?.picAddress}",
+                        maxLines: 3,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 28),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: const Text(
+                          "To: ",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 40),
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        "${_completeOrder?.destiAddress}",
+                        maxLines: 3,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
           const SizedBox(
-            height: 10,
+            height: 12,
           ),
           Container(
-            color: Colors.green,
-            padding: const EdgeInsets.all(8.0),
-            margin: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Text(
-                  'Thursday,',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  '7 july',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                )
-              ],
+            padding: EdgeInsets.only(left: 55),
+            child:  Text(
+              "Weight: ${_completeOrder!.weight.toString()} KG" " " " " " " "Type: ${_completeOrder!.category}",
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
             ),
           ),
           const SizedBox(
-            height: 10,
+            height: 65,
           ),
-          Container(
-            height: 100.0,
-            width: 600.0,
-            margin: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.topRight,
-                  colors: [Colors.orange, Colors.grey]),
-              shape: BoxShape.rectangle,
-            ),
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.message,
-                  color: Colors.black,
-                  size: 30,
-                  semanticLabel: 'Text to announce in accessibility modes',
-                ),
-                Text(
-                  "230",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                )
-              ],
-            ),
-          ),
-          Container(
-            color: Colors.green,
-            padding: const EdgeInsets.all(8.0),
-            margin: const EdgeInsets.only(top: 150, left: 8, right: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Text(
-                  'Thursday,',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  '7 july',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            height: 100.0,
-            width: 600.0,
-            margin: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.topRight,
-                  colors: [Colors.orange, Colors.grey]),
-              shape: BoxShape.rectangle,
-            ),
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.message,
-                  color: Colors.black,
-                  size: 30,
-                  semanticLabel: 'Text to announce in accessibility modes',
-                ),
-                Text(
-                  "230",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                )
-              ],
-            ),
-          ),
-          Container(
-            color: Colors.green,
-            padding: const EdgeInsets.all(8.0),
-            margin: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Text(
-                  'Thursday,',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  '7 july',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            height: 60.0,
-            width: 600.0,
-            margin: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.topRight,
-                  colors: [Colors.orange, Colors.grey]),
-              shape: BoxShape.rectangle,
-            ),
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.message,
-                  color: Colors.black,
-                  size: 30,
-                  semanticLabel: 'Text to announce in accessibility modes',
-                ),
-                Text(
-                  "230",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                )
-              ],
-            ),
-          ),
+
         ],
       ),
+    ),
     );
   }
 }

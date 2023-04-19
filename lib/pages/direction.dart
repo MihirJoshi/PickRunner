@@ -320,10 +320,11 @@ void _fetchActiveOrder(String currentDriverId) {
               endIndent: 15,
               thickness: 2,
             ),
-            SizedBox(height: 35,),
+            const SizedBox(height: 35,),
             Button_Widget(pressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> CollectParcel(destiName: _activeOrder?.destiName?? "", destimobNo: _activeOrder?.destiMobno??"", email: _activeOrder?.email??"", mobNo: _activeOrder?.picMobno??"", name: _activeOrder?.picName??"", orderId: _activeOrder?.orderId??"", price: _activeOrder!.price!, driverUid: widget.driverUid, orderUid: _activeOrder?.uid??"",)));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> CollectParcel(destiName: _activeOrder?.destiName?? "", destimobNo: _activeOrder?.destiMobno??"", email: _activeOrder?.email??"", mobNo: _activeOrder?.picMobno??"", name: _activeOrder?.picName??"", orderId: _activeOrder?.orderId??"", price: _activeOrder!.price!, driverUid: widget.driverUid, orderUid: _activeOrder?.uid??"", d_lat: _activeOrder!.distLat!, d_lng: _activeOrder!.distLng!, p_lat: _activeOrder!.picLat!, p_lng: _activeOrder!.picLng!,)));
             }, width: 270, text: "Collect Parcel"),
+            const SizedBox(height: 25,),
             ],
           ),
         ),
