@@ -30,8 +30,9 @@ class OrderModel {
   String? driverUid;
   String? parcelPhoto;
   String? orderCode;
+  String? parcelStatus;
 
-  OrderModel({this.uid, this.category, this.codType, this.destiAddress, this.destiMobno, this.destiTime, this.distLat, this.distLng, this.distance, this.orderId, this.picAddress, this.picLat, this.picLng, this.picMobno, this.picTime, this.price, this.weight, this.destiInstruct, this.destiName, this.destiSmobno, this.email, this.picInstruct, this.picName, this.picSmobno, this.status, this.driverId, this.driverMobno, this.driverName, this.driverUid, this.parcelPhoto, this.orderCode});
+  OrderModel({this.uid, this.category, this.codType, this.destiAddress, this.destiMobno, this.destiTime, this.distLat, this.distLng, this.distance, this.orderId, this.picAddress, this.picLat, this.picLng, this.picMobno, this.picTime, this.price, this.weight, this.destiInstruct, this.destiName, this.destiSmobno, this.email, this.picInstruct, this.picName, this.picSmobno, this.status, this.driverId, this.driverMobno, this.driverName, this.driverUid, this.parcelPhoto, this.orderCode, this.parcelStatus});
 
   // recieving data from the server
 
@@ -68,6 +69,7 @@ class OrderModel {
       driverUid: map['driverUid'],
       parcelPhoto: map['parcelPhoto'],
       orderCode: map['orderCode'],
+      parcelStatus: map['parcelStatus'],
     );
   }
 
@@ -106,6 +108,7 @@ class OrderModel {
       'driverUid': driverUid,
       'parcelPhoto': parcelPhoto,
       'orderCode': orderCode,
+      'parcelStatus': parcelStatus
     };
   }
 }

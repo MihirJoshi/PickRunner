@@ -43,6 +43,7 @@ class _CollectParcelState extends State<CollectParcel> {
     // writing all values
     await FirebaseFirestore.instance.collection('orders').doc(orderUid).update({
       'parcelPhoto': parcelUrl,
+      'parcelStatus': "Parcel Collected at Pickup Point"
     });
     print('Order status updated successfully');
   } on FirebaseException catch (e) {
