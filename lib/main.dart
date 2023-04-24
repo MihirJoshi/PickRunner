@@ -1,8 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pickrunner/dashboard.dart';
-import 'package:pickrunner/pages/registration/profile_pic.dart';
-import 'package:pickrunner/pages/registration/personal.dart';
 import 'package:pickrunner/splash_screen.dart';
 
 Future<void> main() async {

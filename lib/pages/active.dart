@@ -1,14 +1,17 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore: unused_import
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:pickrunner/models/order_model.dart';
 import 'package:pickrunner/pages/direction.dart';
+import 'package:pickrunner/pages/no_active.dart';
 import 'package:pickrunner/widget/button_widget.dart';
 
+// ignore: must_be_immutable
 class Active extends StatefulWidget {
   String driverUid;
   Active({Key? key, required this.driverUid}) : super(key: key);
@@ -19,6 +22,7 @@ class Active extends StatefulWidget {
 
 class _ActiveState extends State<Active> {
   OrderModel? _activeOrder;
+  // ignore: unused_field
   String? _currentAddress;
   Position? _currentPosition;
 
@@ -88,7 +92,7 @@ Future<bool> _handleLocationPermission() async {
   }
   Future<void> _getAddressFromLatLng(Position position) async {
     await placemarkFromCoordinates(
-            _currentPosition!.latitude, _currentPosition!.longitude)
+            position.latitude, position.longitude)
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
@@ -98,7 +102,7 @@ Future<bool> _handleLocationPermission() async {
     }).catchError((e) {
       debugPrint(e);
     });
-  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +112,7 @@ Future<bool> _handleLocationPermission() async {
     ),
     body: Center(
       child: _activeOrder == null
-          ? CircularProgressIndicator()
+          ? NoActive()
           :  Column(
         children: [
           SizedBox(height: 80,),

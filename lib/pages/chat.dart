@@ -1,10 +1,10 @@
-// ignore_for_file: avoid_unnecessary_containers
-
-import 'package:flutter/material.dart';
-import 'package:pickrunner/dashboard.dart';
+/*import 'package:flutter/material.dart';
+import 'package:flutter_tawk/flutter_tawk.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  String email, name;
+  ChatScreen({Key? key, required this.email, required this.name})
+      : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -13,30 +13,34 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Dashboard()),
-            );
+    String _email = '${widget.email}';
+    String _name = '${widget.name}';
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Pickrun Support'),
+          backgroundColor: const Color.fromARGB(255, 228, 93, 100),
+          elevation: 0,
+        ),
+        body: Tawk(
+          directChatLink:
+              'https://tawk.to/chat/6432c0cf31ebfa0fe7f7512a/1gtj42bob',
+          visitor: TawkVisitor(
+            name: _name,
+            email: _email,
+          ),
+          onLoad: () {
+            print('Hello Tawk!');
           },
-          // ignore: prefer_const_constructors
-          child: Icon(
-            Icons.arrow_back,
-            size: 25,
-            color: Colors.black,
+          onLinkTap: (String url) {
+            print(url);
+          },
+          placeholder: const Center(
+            child: Text('Loading...'),
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Container(
-            child: const Text("Chat Page"),
-          )
-        ],
-      ),
     );
   }
-}
+}*/

@@ -1,12 +1,12 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:pickrunner/pages/offline_page.dart';
 import 'pages/active.dart';
 import 'pages/available.dart';
 import 'pages/completed.dart';
-import 'pages/notification.dart';
 import 'package:pickrunner/pages/profile_page.dart';
 
 class Dashboard extends StatefulWidget {
@@ -17,7 +17,23 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  // ignore: unused_field
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // ignore: unused_field
+  String? _uid;
+  //String _name = "";
+  //String _email = "";
+  @override
+  
   String istapped = ' ';
+  bool _isToggled = false;
+
+  void _toggleButton() {
+    setState(() {
+      _isToggled = !_isToggled;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +49,13 @@ class _DashboardState extends State<Dashboard> {
                     NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverAppBar(
                   title: Row(
-                    
                     children: [
-                      
-                      Text(
+                      const Text(
                         "Orders",
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
-                      Padding(padding: EdgeInsets.only(right: 55)),
+                      const Padding(padding: EdgeInsets.only(right: 120)),
                       IconButton(
                           onPressed: () {
                             Navigator.push(
@@ -53,22 +67,22 @@ class _DashboardState extends State<Dashboard> {
                           icon: const Icon(Icons.settings)),
                       IconButton(
                           onPressed: () {
-                            Navigator.push(
+                            /*Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const Notifications()),
-                            );
+                            );*/
                           },
                           icon: const Icon(Icons.chat)),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const profilepage()),
-                            );
-                          },
-                          icon: const Icon(Icons.face))
+                      InkWell(
+                        onTap: (){
+                          _toggleButton();
+                        },
+                        child: Text(
+                          _isToggled ? '🥺' : '😁',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
                     ],
                   ),
                   centerTitle: true,
@@ -79,6 +93,7 @@ class _DashboardState extends State<Dashboard> {
                   forceElevated: innerBoxIsScrolled,
                   bottom: const TabBar(
                     indicatorColor: Color.fromARGB(255, 255, 255, 255),
+                    labelColor: Color.fromARGB(255, 255, 255, 255),
                     indicatorWeight: 5,
                     tabs: [
                       Tab(
@@ -98,9 +113,14 @@ class _DashboardState extends State<Dashboard> {
           },
           body: TabBarView(
             children: [
-              Available(),
-              Active(driverUid: FirebaseAuth.instance.currentUser!.uid),
-              Completed(driverUid: FirebaseAuth.instance.currentUser!.uid,),
+              if (_isToggled) const Offpage() else const Available(),
+              if (_isToggled)
+                const Offpage()
+              else
+                Active(driverUid: FirebaseAuth.instance.currentUser!.uid),
+              Completed(
+                driverUid: FirebaseAuth.instance.currentUser!.uid,
+              ),
             ],
           ),
         ),

@@ -46,11 +46,12 @@ class _AvailableState extends State<Available> {
   
   Future<void> fetchOrders() async {
     final querySnapshot =
-        await FirebaseFirestore.instance.collection('orders').where('status', isEqualTo: 'available').limit(5).get();
+        await FirebaseFirestore.instance.collection('orders').where('status', isEqualTo: 'available').get();
 
     final List<OrderModel> fetchedOrders = [];
     
 
+    // ignore: avoid_function_literals_in_foreach_calls
     querySnapshot.docs.forEach((doc) {
       final data = doc.data();
       final order = OrderModel.fromMap(data);
@@ -74,7 +75,7 @@ bool canTakeOrder(OrderModel order) {
         builder: (context) => AlertDialog(
           title: const Text('Already Assigned'),
           content: Text(
-              'You have already assigned to Order ${assignOrder}.\n\n Please Complete your pending order!!'),
+              'You have already assigned to Order $assignOrder.\n\n Please Complete your pending order!!'),
           actions: [
             TextButton(
               onPressed: () {
@@ -94,6 +95,7 @@ bool canTakeOrder(OrderModel order) {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: avoid_print
     print(driverUid);
     return Scaffold(
       body: SingleChildScrollView(
@@ -214,7 +216,7 @@ bool canTakeOrder(OrderModel order) {
               padding: const EdgeInsets.only(left: 55),
               child:  Text(
                 "Weight: ${order.weight} KG",
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: Colors.grey),
@@ -227,7 +229,7 @@ bool canTakeOrder(OrderModel order) {
               padding: const EdgeInsets.only(left: 55),
               child:  Text(
                 "Type: ${order.category}",
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: Colors.grey),
